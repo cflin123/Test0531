@@ -1,6 +1,7 @@
 package com.example.cjcu.test0531;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,8 +10,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ListView list;
+    private MyDBHelper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +24,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        list = findViewById(R.id.list);
+        helper = new MyDBHelper(this,"my.db",null,1);
+        Cursor c = helper.getReadableDatabase()
+                .query("exp",null,null,null,null,null,null);
+        SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(this,
+                android.R.layout.simple_expandable_list_item_2,
+                c,
+                new String[] {"info","amount"},
+                new int[] {android.R.id.text1,android.R.id.text2},
+                0);
+        list.setAdapter(simpleCursorAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
