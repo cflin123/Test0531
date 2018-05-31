@@ -19,6 +19,22 @@ public class MainActivity extends AppCompatActivity {
     private MyDBHelper helper;
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        list = findViewById(R.id.list);
+        helper = new MyDBHelper(this,"my.db",null,1);
+        Cursor c = helper.getReadableDatabase()
+                .query("exp",null,null,null,null,null,null);
+        SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(this,
+                android.R.layout.simple_expandable_list_item_2,
+                c,
+                new String[] {"info","amount"},
+                new int[] {android.R.id.text1,android.R.id.text2},
+                1);
+        list.setAdapter(simpleCursorAdapter);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -34,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 c,
                 new String[] {"info","amount"},
                 new int[] {android.R.id.text1,android.R.id.text2},
-                0);
+                1);
         list.setAdapter(simpleCursorAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
